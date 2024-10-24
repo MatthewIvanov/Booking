@@ -1,6 +1,4 @@
 
-
-
 from sqlalchemy import Column, Computed, Date, ForeignKey, Integer
 from app.database import Base
 
