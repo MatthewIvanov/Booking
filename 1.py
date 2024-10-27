@@ -1,12 +1,13 @@
+class Car:
 
-def twoSum(nums:list, target):
-    mp={}
-    ind=0
-    for i in nums:
-        if target - i in mp:
-            print(mp[target-i], ind)
-        mp[i]=ind
-        ind+=1
-            
-a =[2,7,11,15]
-twoSum(a,9)
+    def _start_engine(self):
+        return "Engine's sound."
+
+    def run(self):
+        return self._start_engine()
+
+
+
+car = Car()
+assert "Engine's sound." == car.run()
+assert "Engine's sound." == car._start_engine()
