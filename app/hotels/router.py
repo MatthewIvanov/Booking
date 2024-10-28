@@ -4,9 +4,9 @@
 from datetime import date, datetime
 from fastapi import APIRouter, Query
 
-from app.main import SHotels
+
 router= APIRouter(
-    prefix='hotels',
+    prefix='/hotels',
     tags=['Отели']
 )
 
