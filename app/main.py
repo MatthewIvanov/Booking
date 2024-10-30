@@ -12,7 +12,25 @@ from app.pages.router import router as router_pages
 from app.images.router import router as router_images
 
 
-app=FastAPI()
+
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from fastapi_cache.decorator import cache
+
+from redis import asyncio as aioredis
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    redis = aioredis.from_url("redis://localhost:6379")
+    FastAPICache.init(RedisBackend(redis), prefix="cache")
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
 app.include_router(router_users)
 app.include_router(router_bookings)
 app.include_router(router_hotels)
@@ -25,10 +43,14 @@ origins =[
 app.add_middleware(
       CORSMiddleware,
       allow_origins=origins,
-      allow_creedntails=True,
+      #allow_creedntails=True,
       allow_methods=['GET','POST','OPTIONS','DELETE','PATCH','PUT'],
       allow_headers=['Coontent-Type','Set-Cookie','Access-Control-Allow-Headers','Access-Authorization'],
 )
+
+
+
+
 class HotelSearchArgs:
      def __init__(
                self,
