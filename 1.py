@@ -14,7 +14,7 @@ def decorator(func):
  
 @decorator
 def sum (a:int,b:int):
-    return a+b
+    return a+ b
 
 
 class Person:
