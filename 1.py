@@ -9,7 +9,7 @@ def decorator(func):
         func(*args)
         end=datetime.now()
         print(end-start)
-    return  wrapper      
+    return   wrapper      
 
  
 @decorator
