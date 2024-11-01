@@ -3,13 +3,17 @@ from typing import Optional
 from fastapi import Depends, FastAPI, Query
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from sqladmin import Admin, ModelView
 
 
+from app.admin.views import BookingsAdmin, HotelsAdmin, RoomsAdmin, UserAdmin
 from app.bookings.router import router as router_bookings
+from app.users.models import Users
 from app.users.router import router as router_users
 from app.hotels.router import router as router_hotels
 from app.pages.router import router as router_pages
 from app.images.router import router as router_images
+from app.database import engine
 
 
 
@@ -20,6 +24,8 @@ from fastapi_cache.decorator import cache
 from redis import asyncio as aioredis
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+
+
 
 
 @asynccontextmanager
@@ -87,3 +93,12 @@ class SBooking(BaseModel):
 @app.post('/booking')
 def add_booking(booking:SBooking):
     pass
+
+
+
+
+admin = Admin(app,engine)
+admin.add_view(UserAdmin) 
+admin.add_view(BookingsAdmin)
+admin.add_view(HotelsAdmin) 
+admin.add_view(RoomsAdmin)     
