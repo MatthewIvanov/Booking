@@ -14,6 +14,7 @@ from app.hotels.router import router as router_hotels
 from app.pages.router import router as router_pages
 from app.images.router import router as router_images
 from app.database import engine
+from app.admin.auth import authentication_backend
 
 
 
@@ -97,7 +98,7 @@ def add_booking(booking:SBooking):
 
 
 
-admin = Admin(app,engine)
+admin = Admin(app,engine,authentication_backend=authentication_backend)
 admin.add_view(UserAdmin) 
 admin.add_view(BookingsAdmin)
 admin.add_view(HotelsAdmin) 
