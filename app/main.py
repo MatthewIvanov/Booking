@@ -1,13 +1,17 @@
 from datetime import date
 from typing import Optional
 from fastapi import Depends, FastAPI, Query
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from sqladmin import Admin, ModelView
+import uvicorn
 
 
 from app.admin.views import BookingsAdmin, HotelsAdmin, RoomsAdmin, UserAdmin
+from app.bookings.dao import BookingDAO
 from app.bookings.router import router as router_bookings
+from app.users.dependencies import get_current_user
 from app.users.models import Users
 from app.users.router import router as router_users
 from app.hotels.router import router as router_hotels
@@ -15,6 +19,7 @@ from app.pages.router import router as router_pages
 from app.images.router import router as router_images
 from app.database import engine
 from app.admin.auth import authentication_backend
+from app.exceptions import RoomCannotBeBooked
 
 
 
@@ -78,6 +83,13 @@ class SHotels(BaseModel):
     name:str
     stars:int
 
+
+@app.get('/',response_class=HTMLResponse)
+async def home():
+          return  '''
+        <h1>Home page</h1>
+        '''
+
 @app.get('/hotels')
 def get_hotels(
     search_args:HotelSearchArgs=Depends()
@@ -90,16 +102,12 @@ class SBooking(BaseModel):
     room_id:int
     date_from:int
     date_to:int
-    
-@app.post('/booking')
-def add_booking(booking:SBooking):
-    pass
 
 
-
-
-admin = Admin(app,engine,authentication_backend=authentication_backend)
+admin = Admin(app=app,engine=engine,authentication_backend=authentication_backend)
 admin.add_view(UserAdmin) 
 admin.add_view(BookingsAdmin)
 admin.add_view(HotelsAdmin) 
 admin.add_view(RoomsAdmin)     
+
+

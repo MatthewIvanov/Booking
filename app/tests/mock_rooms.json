@@ -1,0 +1,11 @@
+[
+    {
+        "hotel_id":1,
+        "name":"Улучшенный с террасой и видом на озеро",
+        "description":"Красивый номер",
+        "price":24500,
+        "services":["Free WI-FI"],
+        "quantity":5,
+        "image_id":7
+    }
+]

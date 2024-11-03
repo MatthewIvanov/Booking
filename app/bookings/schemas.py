@@ -14,4 +14,5 @@ class SBooking(BaseModel):
     total_days : int
 
     class Config:
-        orm_mode= True
+        # orm_mode= True
+        from_attributes = True

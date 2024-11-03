@@ -1,3 +1,4 @@
+from typing import Literal
 from pydantic import model_validator, root_validator
 from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
@@ -13,11 +14,17 @@ class Settings(BaseSettings):
     #     return v
     # class Config:
     #     env_file='.env'
+    MODE: Literal['DEV','TEST','PROD']
+
+
     SECRET_KEY:str
     ALGORITHM: str
+    
 
     SECRET_KEY='A/AhRtJ1jOwO45NjI4fAnHqrNb3+pCpDp1FrEtjzAIY='
     ALGORITHM='HS256'
+
+
 
 settings=Settings()
 

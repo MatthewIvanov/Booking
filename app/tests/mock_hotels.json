@@ -1,0 +1,9 @@
+[
+    {
+        "name":"Bridge Resort",
+        "location":"Поселок городского типа",
+        "services":["WI-FI","Parking"],
+        "rooms_quantity":45,
+        "image_id":6
+    }
+]
