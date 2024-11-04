@@ -2,10 +2,14 @@
 import asyncio
 from datetime import datetime
 import json
+from httpx import ASGITransport, AsyncClient
 import pytest
 from sqlalchemy import insert
 from config import settings
 from app.database import Base,async_session_maker,engine 
+from fastapi.testclient import TestClient
+from httpx import AsyncClient
+from app.main import app as fastapi_app
 
 from app.bookings.models import Bookings
 from app.hotels.models import Hotels
@@ -57,3 +61,17 @@ def event_loop(request):
     loop=asyncio.get_event_loop_policy().new_event_loop()
     yield loop 
     loop.close()   
+
+
+
+@pytest.fixture(scope="function")
+async def ac(): #ac-async client
+    async with AsyncClient(transport=ASGITransport(app=fastapi_app),base_url="http://test") as ac:
+        yield ac
+
+@pytest.fixture(scope="function")
+async def session():
+    async with async_session_maker() as session:
+        yield session
+
+

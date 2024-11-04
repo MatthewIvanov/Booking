@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response,status
 
 from app.users.dependencies import get_current_user
 from app.users.schemas import SUserAuth
@@ -18,6 +18,7 @@ async def register_user(user_data:SUserAuth):
         raise UserAlreadyExistsException
     hashed_password= get_password_hash(user_data.passsword)
     await UsersDAO.add(email=user_data.email, hashed_password=hashed_password)
+    return status.HTTP_200_OK
 
 
 @router.post('/login')
