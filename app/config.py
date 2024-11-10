@@ -1,6 +1,9 @@
 from typing import Literal
+
 from pydantic import model_validator, root_validator
 from pydantic_settings import BaseSettings
+
+
 class Settings(BaseSettings):
     # DB_HOST : str
     # DB_PORT : int
@@ -15,6 +18,7 @@ class Settings(BaseSettings):
     # class Config:
     #     env_file='.env'
     MODE: Literal['DEV','TEST','PROD']
+    MODE='TEST'
 
 
     SECRET_KEY:str
@@ -27,4 +31,6 @@ class Settings(BaseSettings):
 
 
 settings=Settings()
+settings.MODE='TEST'
+print(settings.MODE)
 

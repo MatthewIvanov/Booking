@@ -1,9 +1,14 @@
 from datetime import datetime
-from fastapi import Depends, HTTPException,Request,status
-from jose import jwt,JWTError
+
+from fastapi import Depends, HTTPException, Request, status
+from jose import JWTError, jwt
+
 from app.config import settings
+from app.exceptions import (IncorrectEmailOrPasswordException,
+                            IncorrectTokenFormatException,
+                            TokenAbsentException, TokenExpiredException,
+                            UserIsNotPresentException)
 from app.users.dao import UsersDAO
-from app.exceptions import TokenAbsentException,UserIsNotPresentException,IncorrectEmailOrPasswordException,TokenExpiredException,IncorrectTokenFormatException
 
 
 def get_token(request:Request):

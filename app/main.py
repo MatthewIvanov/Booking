@@ -1,37 +1,31 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from datetime import date
 from typing import Optional
-from fastapi import Depends, FastAPI, Query
-from fastapi.responses import HTMLResponse
-from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
-from sqladmin import Admin, ModelView
+
 import uvicorn
-
-
-from app.admin.views import BookingsAdmin, HotelsAdmin, RoomsAdmin, UserAdmin
-from app.bookings.dao import BookingDAO
-from app.bookings.router import router as router_bookings
-from app.users.dependencies import get_current_user
-from app.users.models import Users
-from app.users.router import router as router_users
-from app.hotels.router import router as router_hotels
-from app.pages.router import router as router_pages
-from app.images.router import router as router_images
-from app.database import engine
-from app.admin.auth import authentication_backend
-from app.exceptions import RoomCannotBeBooked
-
-
-
+from fastapi import Depends, FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
-
+from pydantic import BaseModel
 from redis import asyncio as aioredis
-from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
+from sqladmin import Admin, ModelView
 
-
+from app.admin.auth import authentication_backend
+from app.admin.views import BookingsAdmin, HotelsAdmin, RoomsAdmin, UserAdmin
+from app.bookings.dao import BookingDAO
+from app.bookings.router import router as router_bookings
+from app.database import engine
+from app.exceptions import RoomCannotBeBooked
+from app.hotels.router import router as router_hotels
+from app.images.router import router as router_images
+from app.pages.router import router as router_pages
+from app.users.dependencies import get_current_user
+from app.users.models import Users
+from app.users.router import router as router_users
 
 
 @asynccontextmanager
