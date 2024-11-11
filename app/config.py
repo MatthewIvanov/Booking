@@ -15,22 +15,20 @@ class Settings(BaseSettings):
     # def get_database_url(cls,v):
     #     v["DATABASE_URL"]=f'postgresql+asyncpg://{v['DB_USER']}:{v['DB_PASS']}@{v['DB_HOST']}:{v['DB_PORT']}/{v['DB_NAME']}'
     #     return v
-    # class Config:
-    #     env_file='.env'
-    MODE: Literal['DEV','TEST','PROD']
-    MODE='TEST'
+    class Config:
+        env_file = ".env"
 
+    MODE: Literal["DEV", "TEST", "PROD"]
+    MODE = "DEV"
 
-    SECRET_KEY:str
+    LOG_LEVEL: Literal["INFO", "DEBUG"]
+    LOG_LEVEL = "INFO"
+
+    SECRET_KEY: str
     ALGORITHM: str
-    
 
-    SECRET_KEY='A/AhRtJ1jOwO45NjI4fAnHqrNb3+pCpDp1FrEtjzAIY='
-    ALGORITHM='HS256'
-
+    SECRET_KEY = "A/AhRtJ1jOwO45NjI4fAnHqrNb3+pCpDp1FrEtjzAIY="
+    ALGORITHM = "HS256"
 
 
-settings=Settings()
-settings.MODE='TEST'
-print(settings.MODE)
-
+settings = Settings()

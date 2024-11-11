@@ -1,4 +1,3 @@
-
 import pytest
 from fastapi import status
 from httpx import ASGITransport, AsyncClient
@@ -7,8 +6,9 @@ from pydantic import EmailStr
 from app.config import settings
 from app.main import app as fastapi_app
 
+
 async def foo():
-    assert 1==1
+    assert 1 == 1
 
 
 # @pytest.mark.parametrize("email,password,status_code",[
@@ -25,7 +25,7 @@ async def foo():
 #         "email": email,
 #         "password": password,
 #     })
-#     assert response.status_code==status_code  
+#     assert response.status_code==status_code
 
 
 # @pytest.mark.parametrize("email,password,status_code",[

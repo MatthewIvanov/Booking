@@ -1,14 +1,8 @@
-
-
-
 from datetime import date, datetime
 
 from fastapi import APIRouter, Query
 
-router= APIRouter(
-    prefix='/hotels',
-    tags=['Отели']
-)
+router = APIRouter(prefix="/hotels", tags=["Отели"])
 
 # @router.get('')
 # @cache(expire=300)

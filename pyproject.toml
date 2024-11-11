@@ -16,5 +16,3 @@ line_length=88
 check_diff=true
 imports=["sqlalchemy","app"]
 
-[tool.pyright]
-include=["app"]

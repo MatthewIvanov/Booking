@@ -1,4 +1,3 @@
-from sqladmin import Admin
 from sqladmin.authentication import AuthenticationBackend
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
@@ -15,9 +14,9 @@ class AdminAuth(AuthenticationBackend):
         # Validate username/password credentials
         # And update session
 
-        user=await authenticate_user(email,password)
+        user = await authenticate_user(email, password)
         if user:
-            access_token=create_access_token({'sub':str(user.id)})
+            access_token = create_access_token({"sub": str(user.id)})
             request.session.update({"token": access_token})
 
         return True
@@ -31,12 +30,12 @@ class AdminAuth(AuthenticationBackend):
         token = request.session.get("token")
 
         if not token:
-            return RedirectResponse(request.url_for('admin:login'),status_code=302)
+            return RedirectResponse(request.url_for("admin:login"), status_code=302)
 
         # Check the token in depth
-        user=await get_current_user(token)
+        user = await get_current_user(token)
         if not user:
-            return RedirectResponse(request.url_for('admin:login'),status_code=302)
+            return RedirectResponse(request.url_for("admin:login"), status_code=302)
         return True
 
 
