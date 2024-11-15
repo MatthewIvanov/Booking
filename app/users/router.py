@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 
 from app.exceptions import IncorrectEmailOrPasswordException, UserAlreadyExistsException
 from app.users.auth import authenticate_user, create_access_token, get_password_hash
@@ -17,7 +17,7 @@ async def register_user(user_data: SUserAuth):
         raise UserAlreadyExistsException
     hashed_password = get_password_hash(user_data.passsword)
     await UsersDAO.add(email=user_data.email, hashed_password=hashed_password)
-    return status.HTTP_200_OK
+    return HTTPException(status.HTTP_200_OK, detail = "Поздравляем, вы зарегистрированы")
 
 
 @router.post("/login")

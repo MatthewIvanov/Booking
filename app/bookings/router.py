@@ -19,7 +19,7 @@ router = APIRouter(prefix="/bookings", tags=["Бронирование"])
 @router.get("")
 @cache(expire=2000)
 async def get_bokings(user: Users = Depends(get_current_user)) -> list[SBooking]:
-    await asyncio.sleep(3)
+    #await asyncio.sleep(3) тестирование кэша
     return await BookingDAO.find_all(user_id=user.id)
 
 

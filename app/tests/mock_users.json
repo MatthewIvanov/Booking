@@ -1,6 +1,6 @@
 [
     {
         "email":"test@test.com",
-        "hashed_password":"string"
+        "hashed_password":"$2b$12$VSwf5kaA2qYPgRvEHc1NAuT0iLt8MwxFBFSD7ohH3EiLEpOdvOSha"
     }
 ]
