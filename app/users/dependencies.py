@@ -29,10 +29,10 @@ async def get_current_user(token: str = Depends(get_token)):
     expire: str = payload.get("exp")
     if (not expire) or (int(expire) < datetime.now().timestamp()):
         raise TokenExpiredException
-    user_id: str = payload.get("sub")
+    user_id: str = payload.get("sub") 
     if not user_id:
         raise UserIsNotPresentException
-    user = await UsersDAO.find_by_id(int(user_id))
+    user = await UsersDAO.find_one_or_none(id=int(user_id))
     if not user:
         raise UserIsNotPresentException
     return user

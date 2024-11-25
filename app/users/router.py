@@ -13,26 +13,28 @@ router = APIRouter(prefix="/auth", tags=["Auth&Registration"])
 @router.post("/register")
 async def register_user(user_data: SUserAuth):
     existing_user = await UsersDAO.find_one_or_none(email=user_data.email)
+    print(f"Attempting to register user")
     if existing_user:
         raise UserAlreadyExistsException
-    hashed_password = get_password_hash(user_data.passsword)
+    hashed_password = get_password_hash(user_data.password)
     await UsersDAO.add(email=user_data.email, hashed_password=hashed_password)
-    return HTTPException(status.HTTP_200_OK, detail = "Поздравляем, вы зарегистрированы")
+    return  200 #HTTPException(status.HTTP_200_OK, detail = "Поздравляем, вы зарегистрированы")
 
 
 @router.post("/login")
 async def login_user(response: Response, user_data: SUserAuth):
-    user = await authenticate_user(user_data.email, user_data.passsword)
+    user = await authenticate_user(user_data.email, user_data.password)
     if not user:
         raise IncorrectEmailOrPasswordException
     access_token = create_access_token({"sub": str(user.id)})
     response.set_cookie("booking_access_token", access_token, httponly=True)
-    return access_token
+    return 200
 
 
 @router.post("/logout")
 async def logout_user(response: Response):
-    response.delete_cookie("booking_access_token")
+    response.delete_cookie("booking_access_token", path="/", domain="localhost")  # Укажите path и domain
+    return {"message": "Successfully logged out"}  # Возвращаем корректный JSON
 
 
 @router.get("/me")

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <script>async function registerUser(event) {
+        event.preventDefault(); // Предотвращаем стандартное поведение кнопки
+
+        // Получаем значения из полей ввода
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        // Проверяем, чтобы поля не были пустыми
+        if (!email || !password) {
+            document.getElementById("wrong_credentials").textContent = "Пожалуйста, заполните все поля.";
+            return;
+        }
+
+        try {
+            // Отправляем данные на сервер
+            const response = await fetch('http://localhost:8000/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                }),
+            });
+
+            if (response.status===201) {
+                // Если запрос успешен, перенаправляем на страницу входа
+                window.location.href = '/pages/login';
+            } else {
+                // Если произошла ошибка, отображаем сообщение пользователю
+                const errorData = await response.json();
+                document.getElementById("wrong_credentials").textContent = errorData.detail || "Ошибка регистрации.";
+            }
+        } catch (error) {
+            // Если произошла ошибка сети или другая проблема
+            document.getElementById("wrong_credentials").textContent = "Произошла ошибка. Попробуйте снова.";
+            console.error('Error during registration:', error);
+        }
+    }
+
+        function registerUserr(event) {
+            event.preventDefault();  // Предотвращает стандартное действие
+            document.getElementById("message").innerText = "Привет";
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col items-center justify-center h-screen">
+        <span class="font-bold text-3xl mb-10">🏩 Набронировал</span>
+
+        <div>
+            <div class="flex flex-col items-start text-xl mb-5">
+                <label for="email" class="mb-1">Email</label>
+                <input class="border-b-2 border-blue-400 mb-4" id="email" name="email" type="email" value="" placeholder="user@mail.ru">
+
+                <label for="password" class="mb-1">Пароль</label>
+                <input class="border-b-2 border-blue-400" id="password" name="password" type="password" value="" placeholder="********">
+                <span id="wrong_credentials" class="text-sm text-red-400"></span>
+            </div>
+        </div>
+        <button onclick="registerUser(event)" class="text-xl bg-blue    -400 px-3 py-2 rounded-3xl mb-3">Зарегистрироваться</button>
+        <span id="message" class="mt-4 text-xl"></span>
+        <span>
+            Уже зарегистрированы?
+            <a href="/pages/login" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
+                Войти
+            </a>
+        </span>
+    </div>
+{% endblock %}

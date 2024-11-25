@@ -4,6 +4,8 @@ from datetime import date, time
 from typing import Optional
 import time
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 import uvicorn
 from fastapi import Depends, FastAPI, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,13 +23,17 @@ from app.bookings.dao import BookingDAO
 from app.bookings.router import router as router_bookings
 from app.database import engine
 from app.exceptions import RoomCannotBeBooked
-from app.hotels.router import router as router_hotels
+
 from app.images.router import router as router_images
 from app.pages.router import router as router_pages
+from app.hotels.router import router as router_hotels
+from app.rooms.router import router as router_rooms
 from app.users.dependencies import get_current_user
 from app.users.models import Users
 from app.users.router import router as router_users
 from app.logger import logger
+from app.rooms.router import get_rooms
+from app.utils import format_number_thousand_separator
 
 
 @asynccontextmanager
@@ -53,6 +59,10 @@ app.include_router(router_bookings)
 app.include_router(router_hotels)
 app.include_router(router_pages)
 app.include_router(router_images)
+app.include_router(router_rooms)
+
+
+app.mount("/static", StaticFiles(directory="app/static"), "static")
 
 origins = [
     "*",
@@ -87,29 +97,23 @@ class HotelSearchArgs:
         self.stars = stars
 
 
-class SHotels(BaseModel):
-    address: str
-    name: str
-    stars: int
-
-
+templates = Jinja2Templates(directory="app/templates")
 @app.get("/", response_class=HTMLResponse)
-async def home():
-    return """
-        <h1>Home page</h1>
-        """
+async def get_home_page(
+    request: Request,
+    rooms=Depends(get_rooms)
+    ):
+    return templates.TemplateResponse(
+        "home.html",
+        {
+            "request": request,
+            "rooms":rooms,
+            }
+        )
 
-
-@app.get("/hotels")
-def get_hotels(search_args: HotelSearchArgs = Depends()):
-    return search_args
-
-
-class SBooking(BaseModel):
-    room_id: int
-    date_from: int
-    date_to: int
-
+# @app.get("/hotels")
+# def get_hotels(search_args: HotelSearchArgs = Depends()):
+#     return search_args
 
 admin = Admin(app=app, engine=engine, authentication_backend=authentication_backend)
 admin.add_view(UserAdmin)

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block head %}
+{% endblock %}
+
+
+<script>
+    async function bookRoom(){
+        const url = "http://127.0.0.1:8000/bookings"
+        await fetch(url,{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+        }).then(response=>{
+            if(response.status===200){
+                window.location.href = "/pages/bookings"
+            }
+        });
+    }
+</script>
+
+
+{% block content %}
+<div class="flex">
+    <!-- Левая часть - Фильтры -->
+    <div class="w-1/4 p-5">
+        <h2 class="text-xl font-bold mb-4">Фильтры</h2>
+        <form method="GET" action="/search">
+            <label class="block mb-2 text-sm font-medium" for="location">Отель</label>
+            <input id="location" name="location" type="text" placeholder="Введите отель" class="w-full p-2 mb-4 border rounded-md">
+
+            <label class="block mb-2 text-sm font-medium" for="date_from">Дата с</label>
+            <input id="date_from" name="date_from" type="date" class="w-full p-2 mb-4 border rounded-md">
+
+            <label class="block mb-2 text-sm font-medium" for="date_to">Дата по</label>
+            <input id="date_to" name="date_to" type="date" class="w-full p-2 mb-4 border rounded-md">
+
+            <label class="block mb-2 text-sm font-medium" for="spa">Спа</label>
+            <select id="spa" name="spa" class="w-full p-2 mb-4 border rounded-md">
+                <option value="">Любой</option>
+                <option value="true">Да</option>
+                <option value="false">Нет</option>
+            </select>
+
+            <label class="block mb-2 text-sm font-medium" for="stars">Сколько звёзд</label>
+            <select id="stars" name="stars" class="w-full p-2 mb-4 border rounded-md">
+                <option value="">Любой</option>
+                <option value="5">5 звёзд</option>
+                <option value="4">4 звезды</option>
+                <option value="3">3 звезды</option>
+                <option value="2">2 звезды</option>
+                <option value="1">1 звезда</option>
+            </select>
+
+            <label class="block mb-2 text-sm font-medium" for="sort_price">Сортировать по цене</label>
+            <select id="sort_price" name="sort_price" class="w-full p-2 mb-4 border rounded-md">
+                <option value="">Не сортировать</option>
+                <option value="asc">По возрастанию</option>
+                <option value="desc">По убыванию</option>
+            </select>
+
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">
+                Применить
+            </button>
+        </form>
+    </div>
+
+    <!-- Правая часть - Доступные комнаты -->
+    <div class="w-3/4 p-5">
+        <h2 class="text-2xl font-bold mb-4 text-center">Доступные комнаты</h2>
+        <div class="grid grid-cols-1 gap-5">
+            {% for room in rooms %}
+            <div class="flex items-center border shadow-md rounded-md p-4">
+                <!-- Изображение комнаты -->
+                <img src="{{ url_for('static', path='images/' + room.image_id|string + '.webp') }}" alt="{{ room.name }}" class="w-60 h-60 object-cover rounded-md">
+
+                <!-- Информация о комнате -->
+                <div class="ml-4 flex-1">
+                    <h3 class="text-lg font-bold mb-2">{{ room.name }}</h3>
+                    <p class="text-sm text-gray-600 mb-2">{{ room.description or "Описание отсутствует" }}</p>
+                    <p class="text-sm text-gray-500">{{ " · ".join(room.services) }}</p>
+                </div>
+
+                <!-- Стоимость и кнопка забронировать -->
+                <div class="text-right">
+                    <p class="text-xl font-bold text-600 mb-2">{{ room.price }} $ в сутки</p>
+                    <button onclick="bookRoom()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-yellow-600">
+                        Забронировать
+                    </button>
+                </div>
+            </div> 
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

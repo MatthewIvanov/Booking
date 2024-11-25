@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"> -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        async function logoutUser() {
+            const url = "http://localhost:8000/auth/logout";
+
+            await fetch(url, {
+                method: 'POST',
+            }).then(response => {
+                if (response.status === 200) {
+                    document.cookie = "booking_access_token=; Max-Age=0; path=/"; // Удаление на клиенте
+                    window.location.href = "/pages/login"
+                }
+            });
+        }
+    </script>
+    {% block head %}{% endblock %}
+    <title>🌃 Booking</title>
+</head>
+<body>
+<nav class="mb-10">
+    <div class="flex justify-between px-8 py-3 text-2xl">
+      <ul>
+        <li><a href="/">🌃 Booking</a></li>
+      </ul>
+      <ul class="flex gap-x-5">
+        <li><a href="/pages/bookings">Мои брони</a></li>
+        <li>
+            <button onclick="logoutUser()">Выйти</button>
+        </li>
+      </ul>
+    </div>
+    <hr/>
+</nav>
+{% block content %}{% endblock %}
+</body>
+</html>
