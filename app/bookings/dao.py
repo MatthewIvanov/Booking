@@ -14,8 +14,6 @@ from app.logger import logger
 class BookingDAO(BaseDAO):
     model = Bookings
 
-
-
     @classmethod
     async def find_all_with_images(cls, user_id: int):
         async with async_session_maker() as session:
@@ -30,7 +28,6 @@ class BookingDAO(BaseDAO):
             )
             result = await session.execute(query)
             return result.mappings().all()
-        
 
     @classmethod
     async def add(
@@ -69,12 +66,16 @@ class BookingDAO(BaseDAO):
                         )
                     )
                     .select_from(Rooms)
-                    .join(booked_rooms, booked_rooms.c.room_id == Rooms.id, isouter=True)
+                    .join(
+                        booked_rooms, booked_rooms.c.room_id == Rooms.id, isouter=True
+                    )
                     .where(Rooms.id == 1)
                     .group_by(Rooms.quantity, booked_rooms.c.room_id)
                 )
 
-                print(rooms_left.compile(engine, compile_kwargs={"literal_binds": True}))
+                print(
+                    rooms_left.compile(engine, compile_kwargs={"literal_binds": True})
+                )
                 rooms_left = await session.execute(rooms_left)
                 rooms_left: int = rooms_left.scalar()
 
@@ -98,7 +99,7 @@ class BookingDAO(BaseDAO):
                     return new_booking.scalar()
                 else:
                     raise RoomFullyBooked
-                
+
         except RoomFullyBooked:
             raise RoomFullyBooked
         except (SQLAlchemyError, Exception) as e:
@@ -107,9 +108,9 @@ class BookingDAO(BaseDAO):
             elif isinstance(e, Exception):
                 msg = "Unknown Exc: Cannot add booking"
             extra = {
-                    "user_id": user_id,
-                    "room_id": room_id,
-                    "date_from": date_from,
-                    "date_to": date_to,
-                }
+                "user_id": user_id,
+                "room_id": room_id,
+                "date_from": date_from,
+                "date_to": date_to,
+            }
             logger.error(msg, extra=extra, exc_info=True)

@@ -20,8 +20,6 @@ class SBooking(BaseModel):
         from_attributes = True
 
 
-
-
 class SBookingInfo(SBooking):
     image_id: int
     name: str
@@ -29,7 +27,7 @@ class SBookingInfo(SBooking):
     services: list[str]
 
     class Config:
-        #orm_mode = True
+        # orm_mode = True
         from_attributes = True
 
 

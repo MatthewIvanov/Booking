@@ -9,7 +9,6 @@ router = APIRouter(prefix="/pages", tags=["Фронтенд"])
 templates = Jinja2Templates(directory="app/templates")
 
 
-
 @router.get("/register", response_class=HTMLResponse)
 async def get_register_page(request: Request):
     return templates.TemplateResponse("auth/register.html", {"request": request})
@@ -33,6 +32,3 @@ async def get_bookings_page(
             "format_number_thousand_separator": format_number_thousand_separator,
         },
     )
-
-
-

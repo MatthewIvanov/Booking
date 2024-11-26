@@ -3,21 +3,18 @@ from pydantic import BaseModel
 
 
 class SRooms(BaseModel):
-    id :int
-    hotel_id:int
-    name :str
-    description : Optional[str] = " "
-    price :int
-    services : List[str] # In db its json ?
-    quantity:int
-    image_id : int
-
-
+    id: int
+    hotel_id: int
+    name: str
+    description: Optional[str] = " "
+    price: int
+    services: List[str]  # In db its json ?
+    quantity: int
+    image_id: int
 
     class Config:
-        #orm_mode= True
+        # orm_mode= True
         from_attributes = True
-
 
 
 class SRoomsInfo(SRooms):

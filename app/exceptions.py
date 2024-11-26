@@ -1,4 +1,4 @@
-from fastapi import  HTTPException, status
+from fastapi import HTTPException, status
 
 UserAlreadyExistsException = HTTPException(
     status_code=status.HTTP_409_CONFLICT, detail="Пользователь уже существует"
@@ -24,4 +24,6 @@ UserIsNotPresentException = HTTPException(status_code=status.HTTP_401_UNAUTHORIZ
 RoomCannotBeBooked = HTTPException(
     status_code=status.HTTP_409_CONFLICT, detail="Не осталось свободных мест"
 )
-RoomFullyBooked= HTTPException(status_code=status.HTTP_409_CONFLICT,detail="Не осталось свободных номеров")
+RoomFullyBooked = HTTPException(
+    status_code=status.HTTP_409_CONFLICT, detail="Не осталось свободных номеров"
+)

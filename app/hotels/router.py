@@ -5,9 +5,12 @@ from app.hotels.dao import HotelsDAO
 
 router = APIRouter(prefix="/hotels", tags=["Отели"])
 
+
 @router.get("")
 async def get_all_hotels():
     return await HotelsDAO.find_all()
+
+
 # @router.get('')
 # @cache(expire=300)
 # async def get_hotels_by_location_and_time(

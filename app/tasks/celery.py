@@ -1,5 +1,10 @@
 from celery import Celery
+from app.config import settings
 
 celery = Celery(
-    "tasks", broker="redis://:I7VTmtev@localhost:6379/0", include=["app.tasks.tasks"]
+    "tasks",
+    broker=f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}",
+    include=["app.tasks.tasks"],
+    #:I7VTmtev@
 )
+celery.conf.broker_connection_retry_on_startup = True

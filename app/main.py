@@ -15,25 +15,23 @@ from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from pydantic import BaseModel
 from redis import asyncio as aioredis
-from sqladmin import Admin, ModelView
+from sqladmin import Admin
 
 from app.admin.auth import authentication_backend
 from app.admin.views import BookingsAdmin, HotelsAdmin, RoomsAdmin, UserAdmin
-from app.bookings.dao import BookingDAO
 from app.bookings.router import router as router_bookings
 from app.database import engine
-from app.exceptions import RoomCannotBeBooked
 
 from app.images.router import router as router_images
 from app.pages.router import router as router_pages
 from app.hotels.router import router as router_hotels
 from app.rooms.router import router as router_rooms
-from app.users.dependencies import get_current_user
+from app.import_data.import_data import router as router_import
 from app.users.models import Users
 from app.users.router import router as router_users
 from app.logger import logger
 from app.rooms.router import get_rooms
-from app.utils import format_number_thousand_separator
+import sentry_sdk
 
 
 @asynccontextmanager
@@ -45,10 +43,9 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(lifespan=lifespan)
 
-import sentry_sdk
 
-#отслеживаем ошибки
-sentry_sdk.init( 
+# отслеживаем ошибки
+sentry_sdk.init(
     dsn="https://a891116025679a5aa85f4932d59163cb@o4508276436303872.ingest.de.sentry.io/4508276445085776",
     traces_sample_rate=1.0,
     profiles_sample_rate=1.0,
@@ -60,7 +57,7 @@ app.include_router(router_hotels)
 app.include_router(router_pages)
 app.include_router(router_images)
 app.include_router(router_rooms)
-
+app.include_router(router_import)
 
 app.mount("/static", StaticFiles(directory="app/static"), "static")
 
@@ -81,39 +78,19 @@ app.add_middleware(
 )
 
 
-class HotelSearchArgs:
-    def __init__(
-        self,
-        location: str,
-        date_from: date,
-        date_to: date,
-        has_spa: Optional[bool] = None,
-        stars: Optional[int] = Query(None, ge=1, le=5),
-    ):
-        self.location = location
-        self.date_from = date_from
-        self.date_to = date_to
-        self.has_spa = has_spa
-        self.stars = stars
-
-
 templates = Jinja2Templates(directory="app/templates")
+
+
 @app.get("/", response_class=HTMLResponse)
-async def get_home_page(
-    request: Request,
-    rooms=Depends(get_rooms)
-    ):
+async def get_home_page(request: Request, rooms=Depends(get_rooms)):
     return templates.TemplateResponse(
         "home.html",
         {
             "request": request,
-            "rooms":rooms,
-            }
-        )
+            "rooms": rooms,
+        },
+    )
 
-# @app.get("/hotels")
-# def get_hotels(search_args: HotelSearchArgs = Depends()):
-#     return search_args
 
 admin = Admin(app=app, engine=engine, authentication_backend=authentication_backend)
 admin.add_view(UserAdmin)

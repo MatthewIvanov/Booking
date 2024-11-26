@@ -1,4 +1,3 @@
-
 from datetime import date
 from typing import List, Optional
 from sqlalchemy import and_, func, or_, select
@@ -8,10 +7,9 @@ from app.rooms.models import Rooms
 
 from app.database import async_session_maker, engine
 
+
 class RoomsDAO(BaseDAO):
     model = Rooms
-
-
 
     @classmethod
     async def find_all(cls):
@@ -19,8 +17,6 @@ class RoomsDAO(BaseDAO):
             query = select(Rooms.__table__.columns)
             result = await session.execute(query)
             return result.mappings().all()
-        
-
 
     @classmethod
     async def find_all_filter(cls, hotel_id: int, date_from: date, date_to: date):
@@ -56,17 +52,17 @@ class RoomsDAO(BaseDAO):
             .group_by(Bookings.room_id)
             .cte("booked_rooms")
         )
-        
+
         get_rooms = (
             select(
                 Rooms.__table__.columns,
                 (Rooms.price * (date_to - date_from).days).label("total_cost"),
-                (Rooms.quantity - func.coalesce(booked_rooms.c.rooms_booked, 0)).label("rooms_left"),
+                (Rooms.quantity - func.coalesce(booked_rooms.c.rooms_booked, 0)).label(
+                    "rooms_left"
+                ),
             )
             .join(booked_rooms, booked_rooms.c.room_id == Rooms.id, isouter=True)
-            .where(
-                Rooms.hotel_id == hotel_id
-            )
+            .where(Rooms.hotel_id == hotel_id)
         )
         async with async_session_maker() as session:
             # logger.debug(get_rooms.compile(engine, compile_kwargs={"literal_binds": True}))
