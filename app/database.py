@@ -4,20 +4,6 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from app.config import settings
 
-# DB_HOST = "localhost"
-# DB_PORT = 5432
-# DB_USER = "postgres"
-# DB_PASS = "root"
-# DB_NAME = "postgres"
-
-
-# TEST_DB_HOST = "localhost"
-# TEST_DB_PORT = 5432
-# TEST_DB_USER = "postgres"
-# TEST_DB_PASS = "root"
-# TEST_DB_NAME = "test_booking_db"
-
-
 if settings.MODE == "TEST":
     DATABASE_URL = settings.TEST_DATABASE_URL
     DATABASE_PARAMS = {"poolclass": NullPool}
