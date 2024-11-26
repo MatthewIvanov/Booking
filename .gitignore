@@ -108,3 +108,4 @@ settings.json
 .env
 .env-non-dev
 2.py/
+.idea/
