@@ -5,8 +5,13 @@
 ### Список доступных номеров
 ![](images_readme/home.png)
 
+### Забронированные номера
+![](images_readme/bookings.png)
+
 ### Аутентификация
 ![](images_readme/login.png)
+
+
 
 
 
