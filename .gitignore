@@ -104,6 +104,7 @@ venv.bak/
 .mypy_cache/
 
 settings.json
-.vscode
+.vscode/
 .env
-2.py
+.env-non-dev
+2.py/
