@@ -1,4 +1,4 @@
-# 🌃 Hotel Booking System
+![Снимок экрана от 2024-11-26 21-59-12](https://github.com/user-attachments/assets/46d1bbeb-05ef-4f28-98b8-861c13c7b70c)# 🌃 Hotel Booking System
 
 ### 📖 Описание
 Проект **Hotel Booking System** — это веб-приложение, позволяющее пользователям бронировать номера в отелях, управлять бронированиями и получать информацию о доступных номерах. Система разработана с использованием современных технологий и обеспечивает простой и удобный интерфейс.
@@ -11,9 +11,12 @@
 ### Аутентификация
 ![](images_readme/login.png)
 
+### Админка
+![](images_readme/admin.png)
 
-
-
+### Эндпоинты
+![](images_readme/endpoint1.png)
+![](images_readme/endpoint2.png)
 
 ---
 
