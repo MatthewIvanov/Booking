@@ -5,7 +5,6 @@ from jose import JWTError, jwt
 
 from app.config import settings
 from app.exceptions import (
-    IncorrectEmailOrPasswordException,
     IncorrectTokenFormatException,
     TokenAbsentException,
     TokenExpiredException,
